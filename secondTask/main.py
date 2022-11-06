@@ -1,4 +1,4 @@
-import numpy
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -18,7 +18,7 @@ def readFile(filename, dots_list, facets_list):
 
 def printPixel(x, y, img, color):
     for i in range(3):
-        img[-y, x, i] = color[i] #x и y перепутаны, а y сверху вниз
+        img[x, y, i] = color[i] #x и y перепутаны, а y сверху вниз
 
 
 def printLine(x1, y1, x2, y2, img, color):
@@ -108,28 +108,27 @@ def printBackground(img, dots, x, y):
         # color[0] = i * colorShift
         color[1] = i * colorShift
         color[2] = i * colorShift
-        print()
         draw_circle(img, x, y, i, color)
 
 
 def mkWindow(dots, facets, height, width):
     img = np.zeros((width, height, 3), dtype=np.uint8)
     color = np.array([255, 255, 255], dtype=np.uint8)
-    printBackground(img, dots, int(width/2), int(height/2))
+    # printBackground(img, dots, int(width/2), int(height/2))
     printAllGrani(dots, facets, img, color)
     plt.figure()
     plt.imshow(img)
     plt.show()
 
 
-def toScaleDots(dots, windowHeigh, windowWidth):
-    result = min(windowHeigh, windowWidth) / 3
-    maximumValue = numpy.amax(dots)
+def toScaleDots(dots, windowHeight, windowWidth):
+    result = min(windowHeight, windowWidth) / 3
+    maximumValue = abs(np.amax(dots))
     scale = result / maximumValue
     dots = np.array(np.int_(dots*scale))
     for i in range(np.shape(dots)[0]):
-        dots[i][0] += windowWidth / 2
-        dots[i][1] += windowHeigh / 2
+        dots[i][0] += (windowHeight / 2)
+        dots[i][1] += (windowWidth / 2)
     return dots
 
 
@@ -140,12 +139,12 @@ height = 640#plt.get_current_fig_manager().window.winfo_screenwidth()
 
 
 if __name__ == '__main__':
-    readFile("teapot.obj", dots_list, facets_list)
+    readFile("../firstTask/teapot.obj", dots_list, facets_list)
     dots = np.array(dots_list)
     facets = np.array(facets_list)
     dots = toScaleDots(dots, height, width)
     #print(dots, "\n", facets)
-
+    print(dots)
     mkWindow(dots, facets, height, width)
 
 
