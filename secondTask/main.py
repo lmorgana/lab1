@@ -18,7 +18,7 @@ def readFile(filename, dots_list, facets_list):
 
 def printPixel(x, y, img, color):
     for i in range(3):
-        img[x, y, i] = color[i] #x и y перепутаны, а y сверху вниз
+        img[-y, x, i] = color[i] #x и y перепутаны, а y сверху вниз
 
 
 def printLine(x1, y1, x2, y2, img, color):
@@ -106,15 +106,15 @@ def printBackground(img, dots, x, y):
     colorShift = 255 / radius
     for i in range(radius):
         # color[0] = i * colorShift
-        color[1] = i * colorShift
-        color[2] = i * colorShift
+        color[1] = 255 - i * colorShift
+        # color[2] = i * colorShift
         draw_circle(img, x, y, i, color)
 
 
 def mkWindow(dots, facets, height, width):
     img = np.zeros((width, height, 3), dtype=np.uint8)
     color = np.array([255, 255, 255], dtype=np.uint8)
-    # printBackground(img, dots, int(width/2), int(height/2))
+    printBackground(img, dots, int(width/2), int(height/2))
     printAllGrani(dots, facets, img, color)
     plt.figure()
     plt.imshow(img)
@@ -139,12 +139,11 @@ height = 640#plt.get_current_fig_manager().window.winfo_screenwidth()
 
 
 if __name__ == '__main__':
-    readFile("../firstTask/teapot.obj", dots_list, facets_list)
+    readFile("../src/teapot.obj", dots_list, facets_list)
     dots = np.array(dots_list)
     facets = np.array(facets_list)
     dots = toScaleDots(dots, height, width)
     #print(dots, "\n", facets)
-    print(dots)
     mkWindow(dots, facets, height, width)
 
 
